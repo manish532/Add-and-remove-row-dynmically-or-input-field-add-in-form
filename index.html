@@ -1,0 +1,246 @@
+
+<!-- note => if you want to store your added data in database by
+             laravel controller then use this code in controller 
+            start 
+
+
+public function store_format_of_report_blood_sugar(Request $request){
+
+    for ($i = 0; $i <count($request->Description); ++$i) {
+        $arrdata = array(
+          'Name_of_test_report' =>$request->Name_of_test_report,
+          'name_of_the_formet' =>$request->name_of_the_formet,
+          'Description' => $request->Description[$i],
+          'ResultFasting' => $request->ResultFasting[$i],
+          'ResultNormal' => $request->ResultNormal[$i],
+          'units' => $request->units[$i],
+          'Low' => $request->Low[$i],
+          'Normal' => $request->Normal[$i],
+          'Heigh' => $request->Heigh[$i]
+        );
+
+        FormetOfBloodSugarReport::create($arrdata);
+    }
+    return back()->with('message','success !');
+
+} 
+
+end  -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    
+    <!-- two cdn is importent form add new row and popupbox -->
+    
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <!-- end -->
+    
+    <style>
+    
+        .rowcer1 input{
+         
+            border:none !important;
+        
+        }
+        
+        .rowcer1 select{
+         
+         border:none !important;
+        
+        }
+        .bg-color{
+
+
+           background-color: #cccc;
+           margin-top: 20px;
+           padding: 5px;
+        }
+        
+        </style>
+
+</head>
+
+<body>
+    
+<div class="container b-2">
+
+    <div class="row">
+    
+            
+                    <div class="card-title d-flex align-items-center bg-color p-5">
+                        <div><i class="bx bxs-user me-1 font-22 text-primary"></i>
+                        </div>
+                       <h2 class="mb-0 " class="mb-0 text-primary"><center> Add & Remove new row dynamically </center></h2>
+
+                    </div>
+                    
+                    <hr>
+
+<form class="row g-3" action="{{ route('store_format_blood') }}" method="POST" enctype="multipart/form-data" role="form">
+           
+<div class="col-lg-12 p-2">
+<table class="table CertificationT table-bordered mb-0">
+<thead>
+<tr>
+    <th scope="col"><input class="check_allcert" type="checkbox"></th>
+    <th scope="col">Sr. No.</th>
+    <th scope="col">Description</th>
+
+    <th scope="col">Result(Fasting)</th>
+    <th scope="col">Result(Normal)</th>
+    <th scope="col">  &nbsp Units  </th>
+    <th scope="col">Low</th>
+
+    <th scope="col">Normal</th>
+    <th scope="col">Heigh</th>
+</tr>
+</thead>
+<tbody class="input_fields_wrapscert">
+ <tr class="rowcer1">
+    <td><input type="checkbox" value="1" class="CertificationT case lbinput"></td>
+    <td><span id="snum">1</span></td>
+    <td><input type="text" class="form-control" name="Description[]" required="true" ></td>
+    <td><input type="text" class="form-control" name="ResultFasting[]" required="true" ></td>
+    <td><input type="text" class="form-control" name="ResultNormal[]" required="true" ></td>
+
+    <td>
+
+
+    <select class="form-control" id="units" name="units[]" required>
+           
+            <option value="" selected disabled><i class="fa fa-caret-down"></i>select</option>     
+            <option value="Mg/dl">Mg/dl</option>
+            <option value="U/L">U/L</option>              
+            <option value="g/dl">g/dl</option>    
+            <option value="mEq/L">mEq/L</option>
+            <option value="Ng/mLug/dL">Ng/mLug/dL</option>              
+            <option value="ulU/mL">ulU/mL</option>              
+    
+    </select>
+
+
+    </td>
+    <td><input type="text" class="form-control" name="Low[]" required="true" ></td>
+    <td><input type="text" class="form-control" name="Normal[]" required="true" ></td>
+    <td><input type="text" class="form-control" name="Heigh[]" required="true" ></td>
+    
+ </tr>
+</tbody>
+<tfoot class="bg-light">
+<tr>
+<td colspan="5">
+<span class="pointer add_field_buttonscert text-info p-2 cursor-pointer" ><i class="fa fa-plus-circle" aria-hidden="true"></i> Add More Certificate Name</span>
+</td>
+<td colspan="6">
+<span class="pointer del_field_buttonscert text-warning p-2 cursor-pointer"><i class="fa fa-minus-circle" aria-hidden="true"></i> Delete Certificate Name</span>
+</td>
+</tr>
+</tfoot>
+</table>
+</div>
+
+
+
+<div class="col-12" class="modal-footer border border-1">
+<button type="submit" class="btn btn-primary px-5 d-flex">Save</button>
+<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+</div>		
+    
+</form>
+</div>
+</div>
+
+    
+    <script>
+
+    $(".add_field_buttonscert").click(function (e) { //on add input button click
+    
+        e.preventDefault();
+        var i = $('.CertificationT tr').length;
+        count=parseInt($('.CertificationT tr').length) - parseInt(1);
+        var wrapper = $(".input_fields_wrapscert"); //Fields wrapper
+        var add_button = $(".add_field_buttonscert"); //Add button ID
+        $(wrapper).append(`<tr class="rowcer`+count+`">
+                           <td><input value="`+count+`" type="checkbox" class="LinkT case"></td>
+                           <td><span id="1snum+i+'">`+count+`.</span></td>
+                           <td><input required="true" type="text" class="form-control" name="Description[]"></td>
+                           <td><input required="true" type="text" class="form-control" name="ResultFasting[]"></td>
+                           <td><input required="true" type="text" class="form-control" name="ResultNormal[]"></td>
+                           
+                           <td>
+                            <select class="form-control" id="units" name="units[]" required>
+                           
+                           <option value="" selected disabled>select</option>     
+                           <option value="Mg/dl">Mg/dl</option>
+                           <option value="U/L">U/L</option>              
+                           <option value="g/dl">g/dl</option>    
+                           <option value="mEq/L">mEq/L</option>
+                           <option value="Ng/mLug/dL">Ng/mLug/dL</option>              
+                           <option value="ulU/mL">ulU/mL</option>              
+                   
+                           </select>
+    
+                           </td>
+                          
+                           <td><input required="true" type="text" class="form-control" name="Low[]"></td>
+                           <td><input required="true" type="text" class="form-control" name="Normal[]"></td>
+                           <td><input required="true" type="text" class="form-control" name="Heigh[]"></td>
+                          
+                           
+                           </tr>`);
+        i++;
+    });
+    
+    $(".del_field_buttonscert").on('click', function() {
+        swal({
+            title: 'Are you sure?',
+            text: "You won't be able to revert this!",
+            type: 'warning',
+            //showCancelButton: true,
+            buttons: true,
+            dangerMode: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, Delete !'
+        }).then(function (result) {
+            if (result) {
+                console.log("lbbbbb = "+result);
+                    $('.CertificationT .case:checkbox:checked').parents("tr").remove();
+                    
+            }
+       });
+    });
+    
+    $('.check_allcert').click(function(){
+        if($(this).prop("checked")) {
+            $(".CertificationT .case").prop("checked", true);
+        } else {
+            $(".CertificationT .case").prop("checked", false);
+        }                
+    });
+    
+    $('input[class=case]:checkbox').each(function(){ 
+                    if($('input[class=check_allcert]:checkbox:checked').length == 0){ 
+                            $(this).prop("checked", false); 
+                    } else {
+                            $(this).prop("checked", true); 
+                    } 
+    });
+    
+    </script>
+      
+
+</body>
+</html>
